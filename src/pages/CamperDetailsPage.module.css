@@ -1,0 +1,82 @@
+.camperDetailsPage {
+    padding: 2rem;
+  }
+  
+  .camperDetailsPage h1 {
+    color: #E44848;
+    margin-bottom: 1rem;
+  }
+  
+  .camperDetailsPage p {
+    color: #6C717B;
+    margin-bottom: 1.5rem;
+  }
+  
+  .gallery {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .gallery img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .features {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+  
+  .features h2 {
+    color: #E44848;
+    margin-bottom: 1rem;
+  }
+  
+  .features ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .features li {
+    color: #6C717B;
+    margin-bottom: 0.5rem;
+  }
+  
+  .reviews {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reviews h2 {
+    color: #E44848;
+    margin-bottom: 1rem;
+  }
+  
+  .review {
+    margin-bottom: 1rem;
+  }
+  
+  .review p {
+    color: #6C717B;
+  }
+  
+  .bookButton {
+    background-color: #E44848;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .bookButton:hover {
+    background-color: #D84343;
+  }

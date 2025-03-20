@@ -1,0 +1,40 @@
+.homePage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #F7F7F7;
+  }
+  
+  .banner {
+    text-align: center;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .banner h1 {
+    font-size: 2.5rem;
+    color: #E44848;
+  }
+  
+  .banner p {
+    font-size: 1.2rem;
+    color: #6C717B;
+    margin: 1rem 0;
+  }
+  
+  .ctaButton {
+    background-color: #E44848;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .ctaButton:hover {
+    background-color: #D84343;
+  }

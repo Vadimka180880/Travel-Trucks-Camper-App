@@ -1,0 +1,44 @@
+.bookingForm {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+  }
+  
+  .bookingForm h2 {
+    color: #E44848;
+    margin-bottom: 1rem;
+  }
+  
+  .bookingForm button {
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .bookingForm button:first-of-type {
+    background-color: #E44848;
+    color: white;
+  }
+  
+  .bookingForm button:first-of-type:hover {
+    background-color: #D84343;
+  }
+  
+  .bookingForm button:last-of-type {
+    background-color: #6C717B;
+    color: white;
+  }
+  
+  .bookingForm button:last-of-type:hover {
+    background-color: #5A5E66;
+  }

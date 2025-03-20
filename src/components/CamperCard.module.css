@@ -1,0 +1,56 @@
+.camperCard {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+  }
+  
+  .camperImage {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+  
+  .camperCard h2 {
+    color: #E44848;
+    margin-bottom: 0.5rem;
+  }
+  
+  .camperCard p {
+    color: #6C717B;
+    margin-bottom: 1rem;
+  }
+  
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .features div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .detailsLink {
+    background-color: #E44848;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .detailsLink:hover {
+    background-color: #D84343;
+  }
+
+  .favoriteButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
