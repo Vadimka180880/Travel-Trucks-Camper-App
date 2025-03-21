@@ -1,0 +1,14 @@
+.favoritesPage {
+    padding: 2rem;
+  }
+  
+  .favoritesPage h1 {
+    color: #E44848;
+    margin-bottom: 1.5rem;
+  }
+  
+  .camperList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }

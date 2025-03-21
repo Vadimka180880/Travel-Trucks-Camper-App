@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { MdKitchen } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { MdKitchen } from 'react-icons/md';
 import {
   FaCar,
   FaUtensils,
@@ -12,13 +12,20 @@ import {
   FaTint,
   FaHeart,
 } from 'react-icons/fa';
+import { addToFavorites, removeFromFavorites } from '../store/slices/campersSlice';
 import styles from './CamperCard.module.css';
 
 const CamperCard = ({ camper }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.campers.favorites);
+  const isFavorite = favorites.some((fav) => fav.id === camper.id);
 
   const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+    if (isFavorite) {
+      dispatch(removeFromFavorites(camper.id)); // Видалити з улюблених
+    } else {
+      dispatch(addToFavorites(camper)); // Додати до улюблених
+    }
   };
 
   return (
@@ -44,7 +51,7 @@ const CamperCard = ({ camper }) => {
           <FaTv /> {camper.TV ? 'TV' : 'No TV'}
         </div>
         <div>
-        <MdKitchen /> {camper.refrigerator ? 'Refrigerator' : 'No Refrigerator'}
+          <MdKitchen /> {camper.refrigerator ? 'Refrigerator' : 'No Refrigerator'}
         </div>
         <div>
           <FaMicrophone /> {camper.radio ? 'Radio' : 'No Radio'}

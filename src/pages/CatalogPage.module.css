@@ -7,6 +7,21 @@
   margin-bottom: 1.5rem;
 }
 
+.filters {
+  margin-bottom: 2rem;
+}
+
+.filters h2 {
+  color: #E44848;
+  margin-bottom: 1rem;
+}
+
+.filters label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #6C717B;
+}
+
 .camperList {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
