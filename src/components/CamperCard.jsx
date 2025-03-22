@@ -33,7 +33,7 @@ const CamperCard = ({ camper }) => {
       <img src={camper.gallery[0].thumb} alt={camper.name} className={styles.camperImage} />
       <h2>{camper.name}</h2>
       <p>{camper.location}</p>
-      <p>Price: ${camper.price}</p>
+      <p>Price: €{camper.price.toFixed(2)}</p>
       <div className={styles.features}>
         <div>
           <FaCar /> {camper.transmission}

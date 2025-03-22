@@ -1,5 +1,5 @@
 .catalogPage {
-  padding: 2rem;
+  display: flex;
 }
 
 .catalogPage h1 {
@@ -8,7 +8,8 @@
 }
 
 .filters {
-  margin-bottom: 2rem;
+  width: 250px;
+  margin-right: 20px;
 }
 
 .filters h2 {
@@ -16,14 +17,28 @@
   margin-bottom: 1rem;
 }
 
-.filters label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #6C717B;
+.filterButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filterButtons button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.filterButtons button.activeFilter {
+  background-color: #E44848;
+  color: white;
 }
 
 .camperList {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  flex: 1;
 }
