@@ -15,7 +15,10 @@ import {
 import { addToFavorites, removeFromFavorites } from '../store/slices/campersSlice';
 import styles from './CamperCard.module.css';
 
-const CamperCard = ({ camper }) => {
+// Додаємо PropTypes для перевірки типів пропсів
+import PropTypes from 'prop-types';
+
+const CamperCard = ({ camper }) => { // camper передається як пропс
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.campers.favorites);
   const isFavorite = favorites.some((fav) => fav.id === camper.id);
@@ -69,6 +72,30 @@ const CamperCard = ({ camper }) => {
       <Link to={`/catalog/${camper.id}`} className={styles.detailsLink}>Show more</Link>
     </div>
   );
+};
+
+// Додаємо перевірку типів для пропсів
+CamperCard.propTypes = {
+  camper: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    gallery: PropTypes.arrayOf(
+      PropTypes.shape({
+        thumb: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+    transmission: PropTypes.string.isRequired,
+    kitchen: PropTypes.bool.isRequired,
+    AC: PropTypes.bool.isRequired,
+    bathroom: PropTypes.bool.isRequired,
+    TV: PropTypes.bool.isRequired,
+    refrigerator: PropTypes.bool.isRequired,
+    radio: PropTypes.bool.isRequired,
+    gas: PropTypes.bool.isRequired,
+    water: PropTypes.bool.isRequired,
+  }).isRequired,
 };
 
 export default CamperCard;

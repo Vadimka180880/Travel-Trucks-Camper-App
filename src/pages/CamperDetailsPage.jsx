@@ -1,84 +1,66 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import BookingForm from '../components/BookingForm';
 import styles from './CamperDetailsPage.module.css';
 
 const CamperDetailsPage = () => {
   const { id } = useParams();
   const campers = useSelector((state) => state.campers.items);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
   const camper = campers.find((item) => item.id === id);
+  const [activeTab, setActiveTab] = useState('features');
 
   if (!camper) return <div>Camper not found</div>;
 
-  const handleBooking = (e) => {
-    e.preventDefault();
-    alert('Booking confirmed!');
-  };
-
   return (
-    <div className={styles.camperDetailsPage}>
+    <div className={styles.container}>
+      {/* Заголовок та кнопка назад */}
+      <Link to="/catalog" className={styles.backLink}>← Back to Catalog</Link>
       <h1>{camper.name}</h1>
-      <p>{camper.location}</p>
 
-      <div className={styles.contentWrapper}>
-        {/* Ліва частина: Галерея, Features, Reviews */}
-        <div className={styles.leftContent}>
-          {/* Галерея фотографій */}
-          <div className={styles.gallery}>
-            {camper.gallery?.map((photo, index) => (
-              <img key={index} src={photo.original} alt={`Camper ${index + 1}`} />
-            ))}
-          </div>
+      {/* Вкладки Features/Reviews */}
+      <div className={styles.tabs}>
+        <button
+          className={activeTab === 'features' ? styles.activeTab : ''}
+          onClick={() => setActiveTab('features')}
+        >
+          Features
+        </button>
+        <button
+          className={activeTab === 'reviews' ? styles.activeTab : ''}
+          onClick={() => setActiveTab('reviews')}
+        >
+          Reviews ({camper.reviews.length})
+        </button>
+      </div>
 
-          {/* Характеристики */}
+      {/* Контент вкладок */}
+      <div className={styles.content}>
+        {activeTab === 'features' && (
           <div className={styles.features}>
-            <h2>Features</h2>
             <ul>
               <li>Transmission: {camper.transmission}</li>
-              <li>Engine: {camper.engine}</li>
               <li>AC: {camper.AC ? 'Yes' : 'No'}</li>
-              <li>Kitchen: {camper.kitchen ? 'Yes' : 'No'}</li>
+              {/* Інші характеристики */}
             </ul>
           </div>
+        )}
 
-          {/* Відгуки */}
+        {activeTab === 'reviews' && (
           <div className={styles.reviews}>
-            <h2>Reviews</h2>
-            {camper.reviews?.map((review, index) => (
-              <div key={index} className={styles.review}>
+            {camper.reviews.map((review, index) => (
+              <div key={index} className={styles.reviewItem}>
+                <p>⭐ {review.reviewer_rating}/5</p>
                 <p>{review.comment}</p>
-                <p>Rating: {'⭐'.repeat(review.reviewer_rating)}</p>
               </div>
             ))}
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* Права частина: Форма бронювання */}
-        <div className={styles.bookingForm}>
-          <h2>Book this camper</h2>
-          <form onSubmit={handleBooking}>
-            <div>
-              <label>Start Date:</label>
-              <input
-                type="date"
-                value={startDate.toISOString().split('T')[0]}
-                onChange={(e) => setStartDate(new Date(e.target.value))}
-              />
-            </div>
-            <div>
-              <label>End Date:</label>
-              <input
-                type="date"
-                value={endDate.toISOString().split('T')[0]}
-                onChange={(e) => setEndDate(new Date(e.target.value))}
-              />
-            </div>
-            <button type="submit">Confirm Booking</button>
-          </form>
-        </div>
+      {/* Форма бронювання справа */}
+      <div className={styles.bookingSection}>
+        <BookingForm camper={camper} />
       </div>
     </div>
   );

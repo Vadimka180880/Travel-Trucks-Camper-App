@@ -1,118 +1,50 @@
-.camperDetailsPage {
-    padding: 2rem;
+.container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    padding: 30px;
+    max-width: 1440px;
+    margin: 0 auto;
   }
   
-  .camperDetailsPage h1 {
-    color: #E44848;
-    margin-bottom: 1rem;
+  .backLink {
+    grid-column: 1 / -1;
+    color: #FF6347;
+    text-decoration: none;
+    margin-bottom: 20px;
   }
   
-  .camperDetailsPage p {
-    color: #6C717B;
-    margin-bottom: 1.5rem;
-  }
-  
-  .contentWrapper {
+  .tabs {
+    grid-column: 1 / -1;
     display: flex;
-    gap: 2rem;
+    gap: 20px;
+    border-bottom: 2px solid #eee;
   }
   
-  .leftContent {
-    flex: 2;
-  }
-  
-  .bookingForm {
-    flex: 1;
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .bookingForm h2 {
-    color: #E44848;
-    margin-bottom: 1rem;
-  }
-  
-  .bookingForm label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #6C717B;
-  }
-  
-  .bookingForm input {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .bookingForm button {
-    background-color: #E44848;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  .activeTab {
+    border-bottom: 3px solid #FF6347;
     font-weight: bold;
   }
   
-  .bookingForm button:hover {
-    background-color: #D84343;
+  .content {
+    grid-column: 1;
   }
   
-  .gallery {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
+  .bookingSection {
+    grid-column: 2;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
   }
   
-  .gallery img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
-  
-  .features {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-  }
-  
-  .features h2 {
-    color: #E44848;
-    margin-bottom: 1rem;
-  }
-  
-  .features ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .features li {
-    color: #6C717B;
-    margin-bottom: 0.5rem;
-  }
-  
-  .reviews {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .reviews h2 {
-    color: #E44848;
-    margin-bottom: 1rem;
-  }
-  
-  .review {
-    margin-bottom: 1rem;
-  }
-  
-  .review p {
-    color: #6C717B;
+  /* Адаптація для мобільних */
+  @media (max-width: 768px) {
+    .container {
+      grid-template-columns: 1fr;
+    }
+    
+    .bookingSection {
+      grid-column: 1;
+      position: static;
+    }
   }
