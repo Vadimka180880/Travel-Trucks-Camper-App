@@ -5,6 +5,8 @@ import CatalogPage from './pages/CatalogPage';
 import CamperDetailsPage from './pages/CamperDetailsPage';
 import FavoritesPage from './pages/FavoritesPage';
 import styles from './App.module.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
           <Route path="/favorites" element={<FavoritesPage />} />
         </Routes>
       </div>
+      
+      <ToastContainer position="top-right" autoClose={2000} />
     </Router>
   );
 };

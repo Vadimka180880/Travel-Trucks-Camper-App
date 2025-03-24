@@ -21,29 +21,39 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <div className={styles.logoContainer}>
-        <Link to="/" className={styles.logoLink}>
-          <img src={logo} alt="Logo" className={styles.logo} />
-        </Link>
+      <div className={styles.headerInner}>
+        <div className={styles.logoContainer}>
+          <Link to="/" className={styles.logoLink}>
+            <img src={logo} alt="Logo" className={styles.logo} />
+          </Link>
+        </div>
+
+        {/* Кнопка бургер-меню */}
+        <button className={styles.burger} onClick={toggleMenu} aria-label="Toggle menu">
+          <img
+            src={isMobileMenuOpen ? closeIcon : burgerIcon}
+            alt="Menu Icon"
+            className={styles.icon}
+          />
+        </button>
+
+        {/* Навігація */}
+        <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.open : ''}`}>
+          <ul className={styles.navList}>
+            {location.pathname !== '/' && (
+              <li>
+                <Link to="/" className={styles.navLink} onClick={closeMenu}>Home</Link>
+              </li>
+            )}
+            <li>
+              <Link to="/catalog" className={styles.navLink} onClick={closeMenu}>Catalog</Link>
+            </li>
+            <li>
+              <Link to="/favorites" className={styles.navLink} onClick={closeMenu}>Favorites</Link>
+            </li>
+          </ul>
+        </nav>
       </div>
-
-      {/* Кнопка бургер-меню */}
-      <button className={styles.burger} onClick={toggleMenu} aria-label="Toggle menu">
-        <img
-          src={isMobileMenuOpen ? closeIcon : burgerIcon}
-          alt="Menu Icon"
-          className={styles.icon}
-        />
-      </button>
-
-      {/* Навігація */}
-      <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.open : ''}`}>
-        {location.pathname !== '/' && (
-          <Link to="/" className={styles.navLink} onClick={closeMenu}>Home</Link>
-        )}
-        <Link to="/catalog" className={styles.navLink} onClick={closeMenu}>Catalog</Link>
-        <Link to="/favorites" className={styles.navLink} onClick={closeMenu}>Favorites</Link>
-      </nav>
     </header>
   );
 };

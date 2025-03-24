@@ -39,18 +39,28 @@
   }
   
   /* Заголовок */
-  .heroContent h1 {
-    font-size: 3rem;
+  .heroContent h1 {    
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 32px;
+    letter-spacing: 0%;
+    font-family: Inter;
+    color: floralwhite;
   }
   
   /* Підзаголовок */
   .heroContent p {
-    font-size: 1.5rem;
+    
     margin-bottom: 30px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: Inter;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: 0%;
+    font-family: Inter;
   }
   
   /* Кнопка */

@@ -1,76 +1,62 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
-// Асинхронний Thunk для завантаження кемперів
+const initialState = {
+  items: [],
+  favorites: JSON.parse(localStorage.getItem('favorites')) || [],
+  status: 'idle',
+  error: null,
+  filters: {},
+  vehicleType: '',
+  hasMore: true,
+  page: 1,
+};
+
 export const fetchCampers = createAsyncThunk(
   'campers/fetchCampers',
-  async (page = 1, { getState }) => {
-    const { filters, vehicleType } = getState().campers;
-    const limit = 4;
-
-    const params = {
-      page,
-      limit,
-      ...filters,
-      form: vehicleType || undefined,
-    };
-
-    Object.keys(params).forEach((key) => {
-      if (params[key] === false) delete params[key];
-    });
-
-    const response = await axios.get('https://66b1f8e71ca8ad33d4f5f63e.mockapi.io/campers', {
-      params,
-    });
-    return response.data;
+  async (page) => {
+    const response = await axios.get(
+      `https://66b1f8e71ca8ad33d4f5f63e.mockapi.io/campers?page=${page}&limit=4`
+    );
+    return response.data; // має бути { items: [...] }
   }
 );
 
-// Початковий стан
-const initialState = {
-  items: [],
-  status: 'idle',
-  page: 1,
-  hasMore: true,
-  filters: JSON.parse(localStorage.getItem('filters')) || {
-    AC: false,
-    kitchen: false,
-    bathroom: false,
-    TV: false,
-    radio: false,
-    refrigerator: false,
-    microwave: false,
-    gas: false,
-    water: false,
-  },
-  vehicleType: JSON.parse(localStorage.getItem('vehicleType')) || '',
-  favorites: JSON.parse(localStorage.getItem('favorites')) || [],
-};
-
-// Створення slice
 const campersSlice = createSlice({
   name: 'campers',
   initialState,
   reducers: {
-    setFilters: (state, action) => {
+    setFilters(state, action) {
       state.filters = { ...state.filters, ...action.payload };
-      localStorage.setItem('filters', JSON.stringify(state.filters));
     },
-    setVehicleType: (state, action) => {
+    setVehicleType(state, action) {
       state.vehicleType = action.payload;
-      localStorage.setItem('vehicleType', JSON.stringify(state.vehicleType));
     },
-    addToFavorites: (state, action) => {
-      const camper = action.payload;
-      if (!state.favorites.some((fav) => fav.id === camper.id)) {
-        state.favorites.push(camper);
-        localStorage.setItem('favorites', JSON.stringify(state.favorites));
-      }
+    resetCampers(state) {
+      state.items = [];
+      state.hasMore = true;
+      state.page = 1;
     },
-    removeFromFavorites: (state, action) => {
+    toggleFavorite(state, action) {
       const camperId = action.payload;
-      state.favorites = state.favorites.filter((fav) => fav.id !== camperId);
+      const existing = state.favorites.find(fav => fav.id === camperId);
+
+      if (existing) {
+        state.favorites = state.favorites.filter(fav => fav.id !== camperId);
+        toast.info('Removed from favorites');
+      } else {
+        const camperToAdd = state.items.find(c => c.id === camperId);
+        if (camperToAdd) {
+          state.favorites.push(camperToAdd);
+          toast.success('Added to favorites');
+        }
+      }
+
       localStorage.setItem('favorites', JSON.stringify(state.favorites));
+    },
+    nextPage(state) {
+      state.page += 1;
     },
   },
   extraReducers: (builder) => {
@@ -80,22 +66,32 @@ const campersSlice = createSlice({
       })
       .addCase(fetchCampers.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        if (action.payload && Array.isArray(action.payload.items)) {
-          state.items = [...state.items, ...action.payload.items];
-          state.page += 1;
-          state.hasMore = action.payload.items.length > 0;
+
+        const campersArray = action.payload.items;
+
+        if (Array.isArray(campersArray)) {
+          state.items = [...state.items, ...campersArray];
+          if (campersArray.length < 4) {
+            state.hasMore = false;
+          }
         } else {
-          console.error('Invalid API response:', action.payload);
-          state.status = 'failed';
+          state.error = 'Unexpected data format from server';
+          state.hasMore = false;
         }
       })
-      .addCase(fetchCampers.rejected, (state) => {
+      .addCase(fetchCampers.rejected, (state, action) => {
         state.status = 'failed';
+        state.error = action.error.message;
       });
   },
 });
 
-export const { setFilters, setVehicleType, addToFavorites, removeFromFavorites } =
-  campersSlice.actions;
+export const {
+  setFilters,
+  setVehicleType,
+  resetCampers,
+  toggleFavorite,
+  nextPage,
+} = campersSlice.actions;
 
 export default campersSlice.reducer;

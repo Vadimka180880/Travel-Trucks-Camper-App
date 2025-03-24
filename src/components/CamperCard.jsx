@@ -1,101 +1,81 @@
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { MdKitchen } from 'react-icons/md';
-import {
-  FaCar,
-  FaUtensils,
-  FaSnowflake,
-  FaShower,
-  FaTv,
-  FaMicrophone,
-  FaFire,
-  FaTint,
-  FaHeart,
-} from 'react-icons/fa';
-import { addToFavorites, removeFromFavorites } from '../store/slices/campersSlice';
+import PropTypes from 'prop-types';
 import styles from './CamperCard.module.css';
 
-// Додаємо PropTypes для перевірки типів пропсів
-import PropTypes from 'prop-types';
+import TransmissionIcon from '../assets/icon_item/Automatic.png';
+import KitchenIcon from '../assets/icon_item/Kitchen.png';
+import ACIcon from '../assets/icon_item/AC.png';
+import BathroomIcon from '../assets/icon_item/bathroom.png';
+import TVIcon from '../assets/icon_item/Radio.png';
+import RefrigeratorIcon from '../assets/icon_item/Container.png';
+import MicrowaveIcon from '../assets/icon_item/Microwave.png';
+import GasIcon from '../assets/icon_item/Gas.png';
+import WaterIcon from '../assets/icon_item/Container-2.png';
+import PetrolIcon from '../assets/icon_item/Petrol.png';
 
-const CamperCard = ({ camper }) => { // camper передається як пропс
-  const dispatch = useDispatch();
-  const favorites = useSelector((state) => state.campers.favorites);
-  const isFavorite = favorites.some((fav) => fav.id === camper.id);
+import Heart from '../assets/icon_catalog/heart.svg';
+import HeartFilled from '../assets/icon_catalog/heart-filled.svg';
+import Star from '../assets/icon_catalog/star.svg';
 
-  const toggleFavorite = () => {
-    if (isFavorite) {
-      dispatch(removeFromFavorites(camper.id)); // Видалити з улюблених
-    } else {
-      dispatch(addToFavorites(camper)); // Додати до улюблених
-    }
-  };
+const CamperCard = ({ camper, isFavorite, toggleFavorite }) => {
+  const imageUrl = camper.gallery?.[0]?.thumb || 'default-image.jpg';
+
+  const renderFeature = (icon, label) => (
+    <div className={styles.featureItem}>
+      <img src={icon} alt={label} className={styles.icon} />
+      <span className={styles.label}>{label}</span>
+    </div>
+  );
 
   return (
     <div className={styles.camperCard}>
-      <img src={camper.gallery[0].thumb} alt={camper.name} className={styles.camperImage} />
-      <h2>{camper.name}</h2>
-      <p>{camper.location}</p>
-      <p>Price: €{camper.price.toFixed(2)}</p>
-      <div className={styles.features}>
-        <div>
-          <FaCar /> {camper.transmission}
+      <img src={imageUrl} alt={camper.name} className={styles.camperImage} />
+      <div className={styles.camperInfo}>
+        <div className={styles.titleRow}>
+          <h2 className={styles.title}>{camper.name}</h2>
+          <div className={styles.priceFavoriteWrapper}>
+            <p className={styles.price}>€{camper.price.toFixed(2)}</p>
+            <img
+              src={isFavorite ? HeartFilled : Heart}
+              alt="Favorite"
+              className={styles.heartIcon}
+              onClick={() => toggleFavorite(camper.id)}
+            />
+          </div>
         </div>
-        <div>
-          <FaUtensils /> {camper.kitchen ? 'Kitchen' : 'No Kitchen'}
+        <p className={styles.location}>{camper.location}</p>
+        <div className={styles.ratingRow}>
+          <img src={Star} alt="Rating" className={styles.starIcon} />
+          <span className={styles.rating}>{camper.rating}</span>
+          <span className={styles.reviewCount}>({camper.reviews?.length || 0} Reviews)</span>
         </div>
-        <div>
-          <FaSnowflake /> {camper.AC ? 'AC' : 'No AC'}
+        <div className={styles.features}>
+          {renderFeature(TransmissionIcon)}
+          {camper.AC && renderFeature(ACIcon)}
+          {camper.kitchen && renderFeature(KitchenIcon)}
+          {camper.bathroom && renderFeature(BathroomIcon)}
+          {camper.TV && renderFeature(TVIcon)}
+          {camper.refrigerator && renderFeature(RefrigeratorIcon)}
+          {camper.microwave && renderFeature(MicrowaveIcon)}
+          {camper.gas && renderFeature(GasIcon)}
+          {camper.water && renderFeature(WaterIcon)}
+          {renderFeature(PetrolIcon, camper.engine)}
         </div>
-        <div>
-          <FaShower /> {camper.bathroom ? 'Bathroom' : 'No Bathroom'}
-        </div>
-        <div>
-          <FaTv /> {camper.TV ? 'TV' : 'No TV'}
-        </div>
-        <div>
-          <MdKitchen /> {camper.refrigerator ? 'Refrigerator' : 'No Refrigerator'}
-        </div>
-        <div>
-          <FaMicrophone /> {camper.radio ? 'Radio' : 'No Radio'}
-        </div>
-        <div>
-          <FaFire /> {camper.gas ? 'Gas' : 'No Gas'}
-        </div>
-        <div>
-          <FaTint /> {camper.water ? 'Water' : 'No Water'}
-        </div>
+
+        {/* Ось тут кнопка-посилання на CamperDetailsPage */}
+        <Link to={`/catalog/${camper.id}`} className={styles.detailsLink}>
+          Show more
+        </Link>
       </div>
-      <button onClick={toggleFavorite} className={styles.favoriteButton}>
-        <FaHeart color={isFavorite ? 'red' : 'gray'} />
-      </button>
-      <Link to={`/catalog/${camper.id}`} className={styles.detailsLink}>Show more</Link>
     </div>
   );
 };
 
-// Додаємо перевірку типів для пропсів
 CamperCard.propTypes = {
-  camper: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    gallery: PropTypes.arrayOf(
-      PropTypes.shape({
-        thumb: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    transmission: PropTypes.string.isRequired,
-    kitchen: PropTypes.bool.isRequired,
-    AC: PropTypes.bool.isRequired,
-    bathroom: PropTypes.bool.isRequired,
-    TV: PropTypes.bool.isRequired,
-    refrigerator: PropTypes.bool.isRequired,
-    radio: PropTypes.bool.isRequired,
-    gas: PropTypes.bool.isRequired,
-    water: PropTypes.bool.isRequired,
-  }).isRequired,
+  camper: PropTypes.object.isRequired,
+  isFavorite: PropTypes.bool,
+  toggleFavorite: PropTypes.func,
 };
 
 export default CamperCard;

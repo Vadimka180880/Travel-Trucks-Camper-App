@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCampers, setFilters, setVehicleType } from '../store/slices/campersSlice';
+import {
+  fetchCampers,
+  setFilters,
+  setVehicleType,
+  resetCampers,
+  toggleFavorite,
+  nextPage,
+} from '../store/slices/campersSlice';
+
 import CamperCard from '../components/CamperCard';
 import Loader from '../components/Loader';
 import styles from './CatalogPage.module.css';
 
-// Імпорт іконок
 import VanIcon from '../assets/icon_catalog/bi_grid.svg';
 import FullyIntegratedIcon from '../assets/icon_catalog/bi_grid-1x2.svg';
 import AlcoveIcon from '../assets/icon_catalog/bi_grid-3x3-gap.svg';
@@ -13,100 +20,125 @@ import ACIcon from '../assets/icon_catalog/wind.svg';
 import KitchenIcon from '../assets/icon_catalog/cup-hot.svg';
 import BathroomIcon from '../assets/icon_catalog/diagram.svg';
 import TVIcon from '../assets/icon_catalog/tv.svg';
+import RefrigeratorIcon from '../assets/icon_catalog/solar_fridge-outline.svg';
+import MicrowaveIcon from '../assets/icon_catalog/lucide_microwave.svg';
+import GasIcon from '../assets/icon_catalog/hugeicons_gas-stove.svg';
+import WaterIcon from '../assets/icon_catalog/ion_water-outline.svg';
+
+const equipmentList = [
+  { key: 'AC', label: 'AC', icon: ACIcon },
+  { key: 'kitchen', label: 'Kitchen', icon: KitchenIcon },
+  { key: 'bathroom', label: 'Bathroom', icon: BathroomIcon },
+  { key: 'TV', label: 'TV', icon: TVIcon },
+  { key: 'refrigerator', label: 'Refrigerator', icon: RefrigeratorIcon },
+  { key: 'microwave', label: 'Microwave', icon: MicrowaveIcon },
+  { key: 'gas', label: 'Gas', icon: GasIcon },
+  { key: 'water', label: 'Water', icon: WaterIcon },
+];
 
 const CatalogPage = () => {
   const dispatch = useDispatch();
-  const { items, status, hasMore, filters, vehicleType } = useSelector((state) => state.campers);
+  const { items, status, hasMore, filters, vehicleType, error, favorites } = useSelector((state) => state.campers);
   const [localVehicleType, setLocalVehicleType] = useState(vehicleType);
   const [page, setPage] = useState(1);
 
-  // Фільтрація при натисканні Search
+  useEffect(() => {
+    dispatch(resetCampers());
+    dispatch(fetchCampers(1));
+  }, [dispatch]);
+
   const handleSearch = () => {
+    dispatch(resetCampers());
     dispatch(setVehicleType(localVehicleType));
-    dispatch(fetchCampers(1)); // Починаємо з першої сторінки
+    dispatch(fetchCampers(1));
     setPage(1);
   };
 
-  // Завантаження даних при зміні сторінки
-  useEffect(() => {
-    dispatch(fetchCampers(page));
-  }, [dispatch, page]);
+  const loadMore = () => {
+    if (status !== 'loading') {
+      dispatch(fetchCampers(page + 1));
+      dispatch(nextPage()); // ← оновлення номера сторінки
+    }
+  };
 
   return (
     <div className={styles.catalogPage}>
-      {/* Фільтри зліва */}
       <div className={styles.filtersSection}>
-        <h2>Filters</h2>
-        
-        {/* Vehicle Type як іконки */}
         <div className={styles.filterGroup}>
-          <label>Vehicle Type</label>
+          <div className={styles.filterTitle}>Vehicle Type</div>
           <div className={styles.vehicleTypeIcons}>
-            <button
-              className={localVehicleType === 'Van' ? styles.activeVehicleType : ''}
-              onClick={() => setLocalVehicleType('Van')}
-            >
-              <img src={VanIcon} alt="Van" className={styles.icon} /> Van
-            </button>
-            <button
-              className={localVehicleType === 'Fully Integrated' ? styles.activeVehicleType : ''}
-              onClick={() => setLocalVehicleType('Fully Integrated')}
-            >
-              <img src={FullyIntegratedIcon} alt="Fully Integrated" className={styles.icon} /> Fully Integrated
-            </button>
-            <button
-              className={localVehicleType === 'Alcove' ? styles.activeVehicleType : ''}
-              onClick={() => setLocalVehicleType('Alcove')}
-            >
-              <img src={AlcoveIcon} alt="Alcove" className={styles.icon} /> Alcove
-            </button>
+            {[
+              { type: 'Van', icon: VanIcon },
+              { type: 'Fully Integrated', icon: FullyIntegratedIcon },
+              { type: 'Alcove', icon: AlcoveIcon },
+            ].map(({ type, icon }) => (
+              <button
+                key={type}
+                className={`${styles.vehicleTypeButton} ${
+                  localVehicleType === type ? styles.activeVehicleType : ''
+                }`}
+                onClick={() => setLocalVehicleType(type)}
+              >
+                <img src={icon} alt={type} className={styles.icon} />
+                {type}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Інші фільтри з іконками */}
         <div className={styles.filterGroup}>
-          {Object.entries(filters).map(([key, value]) => (
-            <label key={key} className={styles.filterItem}>
-              <input 
-                type="checkbox" 
-                checked={value} 
-                onChange={() => dispatch(setFilters({ [key]: !value }))} 
-              />
-              <span className={styles.filterIcon}>
-                {key === 'AC' && <img src={ACIcon} alt="AC" className={styles.icon} />}
-                {key === 'kitchen' && <img src={KitchenIcon} alt="Kitchen" className={styles.icon} />}
-                {key === 'bathroom' && <img src={BathroomIcon} alt="Bathroom" className={styles.icon} />}
-                {key === 'TV' && <img src={TVIcon} alt="TV" className={styles.icon} />}
-              </span>
-              {key}
-            </label>
-          ))}
+          <div className={styles.filterTitle}>Vehicle Equipment</div>
+          <div className={styles.iconGrid}>
+            {equipmentList.map(({ key, label, icon }) => (
+              <button
+                key={key}
+                className={`${styles.iconButton} ${filters[key] ? styles.active : ''}`}
+                onClick={() => {
+                  dispatch(setFilters({ [key]: !filters[key] }));
+                }}
+              >
+                <img src={icon} alt={label} />
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Кнопка пошуку внизу */}
-        <button onClick={handleSearch} className={styles.searchButton}>
+        <button className={styles.searchButton} onClick={handleSearch}>
           Search
         </button>
       </div>
 
-      {/* Список кемперів */}
       <div className={styles.camperList}>
-        {items.slice(0, page * 4).map((camper, index) => ( // Використовуємо index для унікальних ключів
-          <CamperCard key={`${camper.id}-${index}`} camper={camper} />
+        {status === 'loading' && <Loader />}
+        {status === 'failed' && <p className={styles.error}>Error: {error}</p>}
+        {status !== 'loading' && items.length === 0 && (
+          <p>No results found. Try adjusting your filters.</p>
+        )}
+        {items.map((camper, index) => (
+          <CamperCard
+            key={camper.id || index}
+            camper={camper}
+            isFavorite={favorites.some(fav => fav.id === camper.id)}
+            toggleFavorite={(id) => dispatch(toggleFavorite(id))}
+          />
         ))}
-      </div>
 
-      {/* Кнопка Load More внизу */}
-      {hasMore && items.length > page * 4 && (
-        <div className={styles.loadMoreContainer}>
-          <button 
-            onClick={() => setPage(page + 1)} 
-            className={styles.loadMoreButton}
-          >
-            {status === 'loading' ? 'Loading...' : 'Load More'}
-          </button>
-        </div>
-      )}
+        {hasMore && (
+          <div className={styles.loadMoreContainer}>
+            <button onClick={loadMore} className={styles.loadMoreButton} disabled={status === 'loading'}>
+              {status === 'loading' ? 'Loading...' : 'Load More'}
+            </button>
+          </div>
+        )}
+        {!hasMore && items.length > 0 && (
+          <div className={styles.loadMoreContainer}>
+            <button className={styles.loadMoreButton} disabled>
+              No more results
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
