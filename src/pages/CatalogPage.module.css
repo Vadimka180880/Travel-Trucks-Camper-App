@@ -123,9 +123,7 @@
   max-width: 100%;
 }
 
-.camperList img {
-  /* width: 100%; */
-  /* height: 180px; */
+.camperList img {  
   object-fit: cover;
   border-radius: 8px;
 }
@@ -152,7 +150,6 @@
   cursor: not-allowed;
 }
 
-/* Tablet */
 @media (max-width: 1024px) {
   .catalogPage {
     flex-direction: column;
@@ -174,7 +171,6 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .filtersSection {
     flex-direction: column;
@@ -189,7 +185,6 @@
   }
 }
 
-/* Sticky Header */
 header {
   position: sticky;
   top: 0;

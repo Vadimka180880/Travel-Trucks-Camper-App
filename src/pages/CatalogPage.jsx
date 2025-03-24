@@ -57,7 +57,7 @@ const CatalogPage = () => {
   const loadMore = () => {
     if (status !== 'loading') {
       dispatch(fetchCampers(page + 1));
-      dispatch(nextPage()); // ← оновлення номера сторінки
+      dispatch(nextPage()); 
     }
   };
 

@@ -62,8 +62,7 @@ const CamperCard = ({ camper, isFavorite, toggleFavorite }) => {
           {camper.water && renderFeature(WaterIcon)}
           {renderFeature(PetrolIcon, camper.engine)}
         </div>
-
-        {/* Ось тут кнопка-посилання на CamperDetailsPage */}
+        
         <Link to={`/catalog/${camper.id}`} className={styles.detailsLink}>
           Show more
         </Link>

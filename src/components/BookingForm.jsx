@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './BookingForm.module.css';
-
-// Додаємо PropTypes для перевірки типів пропсів
 import PropTypes from 'prop-types';
 
-const BookingForm = ({ camper, onClose }) => { // camper та onClose передаються як пропси
+const BookingForm = ({ camper }) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [name, setName] = useState('');
@@ -23,7 +21,7 @@ const BookingForm = ({ camper, onClose }) => { // camper та onClose перед
 
   return (
     <div className={styles.bookingForm}>
-      <h2>Book {camper?.name}</h2> {/* Використовуємо camper.name з перевіркою */}
+      <h2>Book {camper?.name}</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Name:</label>
@@ -57,19 +55,20 @@ const BookingForm = ({ camper, onClose }) => { // camper та onClose перед
             onChange={(date) => setEndDate(date)}
           />
         </div>
-        <button type="submit">Confirm Booking</button>
-        <button type="button" onClick={onClose}>Close</button> {/* Використовуємо onClose */}
+        <div className={styles.buttonGroup}>
+          <button type="submit" className={styles.confirm}>
+            Confirm Booking
+          </button>
+        </div>
       </form>
     </div>
   );
 };
 
-// Додаємо перевірку типів для пропсів
 BookingForm.propTypes = {
   camper: PropTypes.shape({
     name: PropTypes.string.isRequired,
   }).isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default BookingForm;

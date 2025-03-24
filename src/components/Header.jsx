@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
 import logo from '../assets/images/logo.png';
 
-// Імпортуємо SVG як звичайні зображення
 import burgerIcon from '../assets/icon_catalog/burger.svg';
 import closeIcon from '../assets/icon_catalog/close.svg';
 
@@ -27,8 +26,7 @@ const Header = () => {
             <img src={logo} alt="Logo" className={styles.logo} />
           </Link>
         </div>
-
-        {/* Кнопка бургер-меню */}
+       
         <button className={styles.burger} onClick={toggleMenu} aria-label="Toggle menu">
           <img
             src={isMobileMenuOpen ? closeIcon : burgerIcon}
@@ -36,8 +34,7 @@ const Header = () => {
             className={styles.icon}
           />
         </button>
-
-        {/* Навігація */}
+      
         <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.open : ''}`}>
           <ul className={styles.navList}>
             {location.pathname !== '/' && (
